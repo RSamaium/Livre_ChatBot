@@ -1,0 +1,63 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Louer film</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <script src="https://checkout.stripe.com/checkout.js"></script>
+</head>
+
+<body>
+    <script>
+        window.extAsyncInit = () => {
+            const params = new URLSearchParams(location.search)
+            const movieId = params.get('id')
+            const address = JSON.parse(decodeURIComponent(params.get('address')))
+            fetch(`/movie/${movieId}`)
+                .then(res => res.json())
+                .then(movie => {
+                    return new Promise((resolve, reject) => {
+                        const handler = StripeCheckout.configure({
+                            key: 'pk_test_dZE7puydL8BweZHVYMSkpmbY',
+                            image: 'https://stripe.com/img/documentation/checkout/marketplace.png',
+                            locale: 'auto',
+                            token: resolve
+                        })
+                        handler.open({
+                            name: `Louer film ${movie.title}`,
+                            description: 'Louer 48h',
+                            currency: 'eur',
+                            amount: movie.amount * 100
+                        })
+                    })
+                })
+                .then((stripeToken) => {
+                    return fetch(`/buy/${movieId}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            stripeToken,
+                            address
+                        })
+                    })
+                })
+                .then(() => {
+                    MessengerExtensions.requestCloseBrowser()
+                })
+                .catch(err => alert(err))
+        }
+
+        (function (d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) { return; }
+            js = d.createElement(s); js.id = id;
+            js.src = "//connect.facebook.com/en_US/messenger.Extensions.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'Messenger'));
+    </script>
+</body>
+
+</html>
