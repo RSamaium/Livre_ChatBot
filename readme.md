@@ -12,3 +12,9 @@ Lancer le serveur :
 Lancer localtunnel
 
 `npm run lt`
+
+# Créer un menu persistant
+
+Lancer la commande (Linux) :
+
+`TOKEN=<token de messenger> sh ./bin/persistent-menu.sh
