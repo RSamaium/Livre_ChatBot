@@ -22,6 +22,6 @@ module.exports = (bot) => {
                 .attachments(nowPlaying)
             session.endDialog(reply)
         }
-    ]).triggerAction({ matches: /moment/i })
+    ]).triggerAction({ matches: 'nowPlaying' })
     bot.beginDialogAction('currentMovie', 'nowPlaying')
 }

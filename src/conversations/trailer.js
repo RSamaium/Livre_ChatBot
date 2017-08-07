@@ -4,7 +4,7 @@ const MovieService = require('../services/movie.service')
 module.exports = (bot) => {
     bot.dialog('trailer', [
         (session, args, next) => {
-            const movieName = args.intent.matched[2]
+            const movieName = args.intent.params.movie_name || args.intent.params.search_query
             if (!movieName) {
                 builder.Prompts.text(session, 'Indique-moi le nom du film :)')
                 return
@@ -45,5 +45,5 @@ module.exports = (bot) => {
                 session.error(err)
             }
         }
-    ]).triggerAction({ matches: /(voir|montrer) bande annonce(.*)?/i })
+    ]).triggerAction({ matches: 'trailer' })
 }

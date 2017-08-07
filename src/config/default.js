@@ -8,6 +8,12 @@ module.exports = {
   stripe: {
     token: ''
   },
+  apiai: {
+    token: ''
+  },
+  witai: {
+    token: ''
+  },
   themoviedb: {
     token: '',
     siteUrl: 'https://www.themoviedb.org',
